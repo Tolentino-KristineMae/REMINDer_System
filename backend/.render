@@ -1,0 +1,16 @@
+# Reference only — Render does NOT read this file for env vars unless you use a Blueprint (see ../render.yaml).
+# Configure everything in: Render Dashboard → your Web Service → Settings.
+#
+# Root Directory: Rback
+#
+# Required Environment variables (Environment tab):
+#   APP_KEY       — run locally: php artisan key:generate --show  (paste full value, starts with base64:)
+#   APP_URL       — https://your-service.onrender.com
+#   DATABASE_URL  — Supabase Postgres URI (Dashboard → Connect → URI), sslmode=require
+#   DB_CONNECTION — pgsql   (when using Supabase)
+#
+# Optional (Vercel frontend):
+#   CORS_ALLOWED_ORIGINS — https://your-app.vercel.app
+#
+buildCommand: composer install --no-dev --optimize-autoloader && cd ../frontend && npm ci && npm run build && rm -rf ../Rback/public/assets && cp -r dist/. ../Rback/public/ && cd ../Rback && chmod +x build.sh && ./build.sh
+startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
